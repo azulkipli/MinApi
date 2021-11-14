@@ -1,5 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
+DotNetEnv.Env.Load();
+
 // Add services to the container.
 
 var app = builder.Build();
@@ -33,8 +35,13 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 });
 
-// run default port http://localhost:5000 && https://localhost:5001
-app.Run();
+// run default port 5000 / 5001
+// app.Run();
+
+// load port from EnvironmentVariable
+var appPort = Environment.GetEnvironmentVariable("APP_PORT") ?? "5000";
+
+app.Run($"http://localhost:{appPort}");
 
 // Function to generate list of temperatures
 record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
